@@ -1,0 +1,56 @@
+name: Publish score to leaderboard
+
+on:
+  workflow_run:
+    workflows: ["Grade submission"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download result
+        uses: actions/download-artifact@v4
+        with:
+          name: result-${{ github.event.workflow_run.actor.login }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: result
+
+      - name: Checkout leaderboard repo
+        uses: actions/checkout@v4
+        with:
+          repository: YOUR_ORG/leaderboard        # <-- change this
+          token: ${{ secrets.LEADERBOARD_TOKEN }}
+          path: board
+
+      - name: Merge score (best per week, sum into season total)
+        run: |
+          python3 - <<'PY'
+          import json, os, datetime, glob
+          res = json.load(open(glob.glob("result/*.json")[0]))
+          path = "board/scores.json"
+          data = json.load(open(path)) if os.path.exists(path) else {}
+          user, week = res["user"], res["week"]
+          rec = data.setdefault(user, {"weeks": {}})
+          prev = rec["weeks"].get(week, {}).get("score", -1)
+          if res["score"] >= prev:
+              rec["weeks"][week] = {"score": res["score"], "max_score": res["max_score"]}
+          rec["total"] = sum(w["score"] for w in rec["weeks"].values())
+          rec["total_max"] = sum(w["max_score"] for w in rec["weeks"].values())
+          rec["updated"] = datetime.datetime.utcnow().isoformat() + "Z"
+          json.dump(data, open(path, "w"), indent=2)
+          PY
+
+      - name: Commit and push
+        run: |
+          cd board
+          git config user.name "leaderboard-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add scores.json
+          git commit -m "score: ${{ github.event.workflow_run.actor.login }} / ${{ github.event.workflow_run.id }}" || exit 0
+          git push

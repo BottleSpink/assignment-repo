@@ -1,0 +1,79 @@
+name: Grade submission
+
+on:
+  push:
+    branches: [main]
+    paths: ["week*/ex*/solution.py"]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "What to grade, e.g. week3_ex2"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: grade-${{ github.actor }}
+  cancel-in-progress: true
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout student submission
+        uses: actions/checkout@v4
+        with:
+          path: submission
+          fetch-depth: 2
+
+      - name: Determine which week/exercise changed
+        id: tgt
+        run: |
+          if [ -n "${{ github.event.inputs.target }}" ]; then
+            TARGET="${{ github.event.inputs.target }}"
+            WEEK=$(echo "$TARGET" | grep -oE 'week[0-9]+' | head -1)
+            EX=$(echo "$TARGET"   | grep -oE 'ex[0-9]+'   | head -1)
+          else
+            cd submission
+            CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^week[0-9]+/ex[0-9]+/solution\.py' | head -1)
+            WEEK=$(echo "$CHANGED" | grep -oE 'week[0-9]+' | head -1)
+            EX=$(echo "$CHANGED"   | grep -oE 'ex[0-9]+'   | head -1)
+          fi
+          echo "week=$WEEK"   >> "$GITHUB_OUTPUT"
+          echo "ex=$EX"       >> "$GITHUB_OUTPUT"
+          echo "target=${WEEK}_${EX}" >> "$GITHUB_OUTPUT"
+
+      - name: Fail if nothing detected
+        if: steps.tgt.outputs.week == '' || steps.tgt.outputs.ex == ''
+        run: echo "No week*/ex*/solution.py change found." && exit 1
+
+      - name: Checkout private tests
+        uses: actions/checkout@v4
+        with:
+          repository: YOUR_ORG/private-tests-repo   # <-- change YOUR_ORG
+          token: ${{ secrets.TESTS_REPO_TOKEN }}
+          path: tests-checkout
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run grader
+        run: |
+          WEEK="${{ steps.tgt.outputs.week }}"
+          EX="${{ steps.tgt.outputs.ex }}"
+          TARGET="${{ steps.tgt.outputs.target }}"
+          cd tests-checkout/tests
+          python grade.py \
+            --solution "$GITHUB_WORKSPACE/submission/$WEEK/$EX/solution.py" \
+            --week "$TARGET" \
+            --out "$GITHUB_WORKSPACE/result.json" \
+            --user "${{ github.actor }}"
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ github.actor }}
+          path: result.json
