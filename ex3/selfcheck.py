@@ -1,4 +1,4 @@
-"""Local sample check for ex3. NOT the full hidden suite."""
+"""Local sample check for ex3"""
 import solution as s
 samples = [
     ("unigrams", (["the","cat"],), [("the",),("cat",)]),
