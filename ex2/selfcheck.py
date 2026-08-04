@@ -1,4 +1,4 @@
-"""Local sample check for ex2. NOT the full hidden suite."""
+"""Local sample check for ex2."""
 import solution as s
 samples = [
     ("get_suffix", ("running",3), "ing"),
