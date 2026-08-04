@@ -7,12 +7,11 @@ Pure Python — no imports needed. Don't rename functions or change arguments.
 Test locally:  python selfcheck.py   (run from inside the ex2 folder)
 Then commit & push this file. Your score updates on the leaderboard.
 
-Points: Q1=10, Q2=15, Q3=20, Q4=25, Q5=30  (total 100)
 """
 
 
 def get_suffix(word, k):
-    """Q1 (10 pts). Return the last `k` characters of `word`.
+    """Q1. Return the last `k` characters of `word`.
     If k >= len(word), return the whole word. If k <= 0, return "".
     Example: get_suffix("running", 3) -> "ing"
     """
@@ -21,7 +20,7 @@ def get_suffix(word, k):
 
 
 def is_plural(word):
-    """Q2 (15 pts). Return True if `word` looks like a regular plural, else False.
+    """Q2. Return True if `word` looks like a regular plural, else False.
     Rule: ends in 's' BUT NOT in 'ss'.
     Examples: is_plural("cats") -> True, is_plural("class") -> False,
               is_plural("cat") -> False
@@ -31,7 +30,7 @@ def is_plural(word):
 
 
 def stem(word):
-    """Q3 (20 pts). Strip ONE suffix using this EXACT ordered rule set.
+    """Q3. Strip ONE suffix using this EXACT ordered rule set.
     Check suffixes in THIS ORDER; strip the FIRST that matches AND that
     leaves a stem of length >= 2. If none match, return the word unchanged.
     Order: "ing", "ed", "ly", "es", "s"
@@ -45,7 +44,7 @@ def stem(word):
 
 
 def pluralize(word):
-    """Q4 (25 pts). Return the plural of `word` using THESE EXACT rules,
+    """Q4. Return the plural of `word` using THESE EXACT rules,
     checked in order:
       1. ends in 's','x','z','ch','sh'      -> add "es"   (box->boxes, bus->buses)
       2. ends in consonant + 'y'            -> replace 'y' with "ies" (baby->babies)
@@ -61,7 +60,7 @@ def pluralize(word):
 
 
 def count_morphemes(word, affixes):
-    """Q5 (30 pts). Count morphemes = 1 (the stem) + number of affixes present.
+    """Q5. Count morphemes = 1 (the stem) + number of affixes present.
     `affixes` is a list of suffix strings. Strip affixes GREEDILY and REPEATEDLY
     from the END: each time the current word ends with any affix in the list
     (check the list in order, take the first match) AND stripping leaves length
