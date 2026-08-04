@@ -24,7 +24,7 @@ jobs:
       - name: Checkout leaderboard repo
         uses: actions/checkout@v4
         with:
-          repository: YOUR_ORG/leaderboard        # <-- change this
+          repository: BottleSpink/leaderboard       
           token: ${{ secrets.LEADERBOARD_TOKEN }}
           path: board
 

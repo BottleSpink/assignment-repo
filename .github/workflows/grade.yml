@@ -51,7 +51,7 @@ jobs:
       - name: Checkout private tests
         uses: actions/checkout@v4
         with:
-          repository: YOUR_ORG/private-tests-repo   # <-- change YOUR_ORG
+          repository: BottleSpink/private-tests-repo   
           token: ${{ secrets.TESTS_REPO_TOKEN }}
           path: tests-checkout
 
