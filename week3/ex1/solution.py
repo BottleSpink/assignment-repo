@@ -11,13 +11,7 @@ import re
 
 
 def find_words(text):
-    """Q1. Return a list of all word tokens in `text`.
-    A "word" is one or more word-characters (letters, digits, underscore).
-    Order = left to right as they appear.
-    Example: find_words("Hi there, cats!") -> ['Hi', 'there', 'cats']
-    """
-    # your code here
-    pass
+    return re.findall(r"\w+", text)
 
 
 def extract_numbers(text):
