@@ -1,13 +1,11 @@
 """
-Exercise 1 — Regular Expressions
+Exercise 1 : Regular Expressions
 
 Implement the 5 functions below. They ramp from easy to make-you-think.
 Use the `re` module. Don't rename functions or change arguments.
 
 Test locally:  python selfcheck.py   (run from inside the ex1 folder)
 Then commit & push this file. Your score updates on the leaderboard.
-
-Points: Q1=10, Q2=15, Q3=20, Q4=25, Q5=30  (total 100)
 """
 import re
 
