@@ -11,7 +11,7 @@ import re
 
 
 def find_words(text):
-    """Q1 (10 pts). Return a list of all word tokens in `text`.
+    """Q1. Return a list of all word tokens in `text`.
     A "word" is one or more word-characters (letters, digits, underscore).
     Order = left to right as they appear.
     Example: find_words("Hi there, cats!") -> ['Hi', 'there', 'cats']
@@ -21,7 +21,7 @@ def find_words(text):
 
 
 def extract_numbers(text):
-    """Q2 (15 pts). Return a list of all numbers (as strings) in `text`.
+    """Q2. Return a list of all numbers (as strings) in `text`.
     A number is one or more digits, optionally followed by a decimal point
     and more digits. Integers and decimals both count.
     Example: extract_numbers("I paid 3.50 for 2 cats in 2024")
@@ -32,7 +32,7 @@ def extract_numbers(text):
 
 
 def find_capitalized(text):
-    """Q3 (20 pts). Return a list of words that START with an uppercase letter.
+    """Q3. Return a list of words that START with an uppercase letter.
     A word starts at a word boundary. Keep original casing. Left to right.
     Example: find_capitalized("The striped Cat met Alice")
              -> ['The', 'Cat', 'Alice']
@@ -42,7 +42,7 @@ def find_capitalized(text):
 
 
 def find_repeated_words(text):
-    """Q4 (25 pts). Return a list of words that appear TWICE IN A ROW
+    """Q4. Return a list of words that appear TWICE IN A ROW
     (a doubled word), matched CASE-INSENSITIVELY. Return each repeated word
     LOWERCASED, in the order the repeats occur.
     A repeat = the same word, separated only by whitespace.
@@ -57,7 +57,7 @@ def find_repeated_words(text):
 
 
 def mask_phone(text):
-    """Q5 (30 pts). Replace every phone number with the literal <PHONE>.
+    """Q5. Replace every phone number with the literal <PHONE>.
     A phone number here is exactly: 3 digits, a hyphen, 4 digits  (555-1234).
     Return the resulting string. Everything else stays unchanged.
     Example: mask_phone("Call 555-1234 or 555-5678 now")
