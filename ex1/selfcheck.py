@@ -1,5 +1,5 @@
 """Local sample check for ex1. A few cases so you can test before pushing.
-NOT the full hidden suite — passing these doesn't guarantee full marks."""
+NOT the full hidden suite."""
 import solution as s
 samples = [
     ("find_words", ("Hi there, cats!",), ['Hi','there','cats']),
